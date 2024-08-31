@@ -23,6 +23,10 @@ export async function login(formData: FieldValues) {
     console.log(error)
     redirect('/error')
   }
+  if(formData.email === 'suleman_raji@yahoo.com'){
+    redirect('/admin')
+  }
+
 
   revalidatePath('/', 'layout')
   redirect('/')
@@ -47,4 +51,18 @@ export async function signup(formData: FieldValues) {
 
   revalidatePath('/', 'layout')
   redirect('/')
+}
+
+export async function logout() {
+  const supabase = createClient()
+  console.log('logout')
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    console.log(error)
+    redirect('/error')
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/login')
 }

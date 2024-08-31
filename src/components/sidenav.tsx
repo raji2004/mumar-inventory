@@ -1,17 +1,17 @@
 "use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { logout } from "@/utils/action";
+import { usePathname } from "next/navigation";
 
 // Icon Components
 function Icon({ children, className }: { children: React.ReactNode; className: string }) {
   return <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{children}</svg>;
 }
-
-
 
 function MenuIcon(props: any) {
   return (
@@ -50,15 +50,14 @@ const navItems = [
     icon: '/icon/Order.svg',
   },
 ]
+
 // Navigation Link Component
-function NavLink({ href, iconSrc, children,isActive }: { href: string;isActive?:boolean; iconSrc: string; children: React.ReactNode }) {
- 
-  
+function NavLink({ href, iconSrc, children, isActive }: { href: string; isActive?: boolean; iconSrc: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
       className={cn("flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50",
-        isActive? "text-primary-900 bg-gray-200" : "text-black"
+        isActive ? "text-primary-900 bg-gray-200" : "text-black"
       )}
       prefetch={false}
     >
@@ -71,7 +70,12 @@ function NavLink({ href, iconSrc, children,isActive }: { href: string;isActive?:
 // Main Component
 export default function SideNav() {
   const pathname = usePathname();
-  
+
+  const handleLogout = async () => {
+    await logout();
+    // This will handle the redirect inside the logout function itself.
+  };
+
   return (
     <>
       <div className="hidden lg:block lg:w-64 lg:shrink-0 lg:border-r lg:bg-white dark:lg:bg-gray-800">
@@ -81,14 +85,17 @@ export default function SideNav() {
               <Image src="/logo.svg" alt="Acme Inc" width={32} height={32} className=" w-28 h-auto mx-auto" />
             </Link>
             <nav className="space-y-1">
-              {navItems.map((item, index) => {
+              {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return <NavLink key={item.name} href={item.href} iconSrc={item.icon} isActive={isActive}>{item.name}</NavLink>
               })}
             </nav>
           </div>
           <div className="space-y-4">
-           <NavLink href="/" iconSrc="/icon/Log Out.svg">Log Out</NavLink>
+            <Button onClick={handleLogout} className="flex items-center bg-white text-black hover:text-white space-x-2">
+              <Image src="/icon/Log Out.svg" alt="Log Out" width={24} height={24} />
+              <span>Log Out</span>
+            </Button>
           </div>
         </div>
       </div>
@@ -96,7 +103,7 @@ export default function SideNav() {
         <header className="sticky top-0 z-10 border-b bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-900 lg:hidden">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2 font-bold" prefetch={false}>
-            <Image src="/logo.svg" alt="Acme Inc" width={32} height={32} className=" w-28 h-auto mx-auto" />
+              <Image src="/logo.svg" alt="Acme Inc" width={32} height={32} className=" w-28 h-auto mx-auto" />
             </Link>
             <Sheet>
               <SheetTrigger asChild>
@@ -109,14 +116,17 @@ export default function SideNav() {
                 <div className="flex h-full flex-col justify-between py-6 px-4">
                   <div className="space-y-6">
                     <nav className="space-y-1">
-                      {navItems.map((item, index) => {
+                      {navItems.map((item) => {
                         const isActive = pathname === item.href;
                         return <NavLink key={item.name} href={item.href} iconSrc={item.icon} isActive={isActive}>{item.name}</NavLink>
                       })}
                     </nav>
                   </div>
                   <div className="space-y-4">
-                  <NavLink href="/" iconSrc="/icon/Log Out.svg">Log Out</NavLink>
+                    <Button onClick={handleLogout} className="flex items-center bg-white text-black hover:text-white space-x-2">
+                      <Image src="/icon/Log Out.svg" alt="Log Out" width={24} height={24} />
+                      <span>Log Out</span>
+                    </Button>
                   </div>
                 </div>
               </SheetContent>

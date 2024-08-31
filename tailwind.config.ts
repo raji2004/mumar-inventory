@@ -29,9 +29,9 @@ const config = {
           900: '#062D81',
         },
         secondary: '#464555',
-        success: '#A4F4E7',
-        warning: '#F4C790',
-        error: '#E50041',
+        success: '#10A760',
+        warning: '#E19133',
+        error: '#DA3E33',
        
       },
       keyframes: {
