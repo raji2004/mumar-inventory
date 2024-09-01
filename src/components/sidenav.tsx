@@ -27,7 +27,7 @@ const navItems = [
   {
     name: "Dashboard",
     href: "/admin",
-    icon: '/icon/home.svg',
+    icon: '/icon/Home.svg',
   },
   {
     name: "Inventory",
