@@ -4,17 +4,23 @@ import { revalidatePath } from 'next/cache'
 
 const supabase = createClient();
 
-export const getAllProduct = async (): Promise<Product[]> => {
-    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-    await delay(3000);
+export const getAllProduct = async ({query}:{query?: string}={}): Promise<Product[]> => {
+  
 
-    const { data, error } = await supabase
-        .from('product_availability')
-        .select('*');
+    let queryBuilder = supabase.from('product_availability').select('*');
+
+    // If a query is provided, filter by name
+    if (query) {
+        queryBuilder = queryBuilder.ilike('name', `%${query}%`); // Case-insensitive search
+    }
+
+    const { data, error } = await queryBuilder;
+
     if (error) {
         throw error;
     }
-   revalidatePath('/admin/inventory', 'layout')
+
+    revalidatePath('/admin/inventory', 'layout');
     return data;
 }
 

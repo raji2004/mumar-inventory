@@ -8,9 +8,9 @@ import Link from "next/link"
 import { DownloadFile } from "@/components/download"
 import { getAllProduct } from "@/lib/db/read"
 
-export default async function Page() {
-    
-    const products = await getAllProduct();
+export default async function Page({searchParams,}:{searchParams:{query?: string}}) {
+    console.log('searchParams',searchParams.query);
+    const products = await getAllProduct({query:searchParams.query});
 
    
     return (

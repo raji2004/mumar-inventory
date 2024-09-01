@@ -30,7 +30,7 @@ export default function Page() {
 
   return (
     <div className={cn("flex h-screen")}>
-      <div className="relative w-1/2 h-full">
+      <div className="relative hidden md:block w-1/2 h-full">
         <Image
           src="/inventory.svg"
           alt="logo"
@@ -40,7 +40,7 @@ export default function Page() {
         />
       </div>
 
-      <div className="w-1/2 flex flex-col items-center justify-center space-y-5 p-4">
+      <div className="md:w-1/2 flex flex-col items-center justify-center space-y-5 p-4 mx-auto md:mx-0">
         <Image
           src="/logo.svg"
           alt="logo"
@@ -48,7 +48,7 @@ export default function Page() {
           height={40}
           className="w-40 h-auto"
         />
-        <h1 className="text-4xl font-semibold mt-4">Log in to your account</h1>
+        <h1 className="text-2xl md:text-4xl font-semibold mt-4">Log in to your account</h1>
         <p className="text-sm text-gray-500">Welcome back! Please enter your details.</p>
 
         <Form {...form}>
