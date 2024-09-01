@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import * as XLSX from 'xlsx';
 import { Product } from "@/lib/type"
 
-export const DownloadFile = async ({products}:{products:Product[]}) => {
+export const DownloadFile =  ({products}:{products:Product[]}) => {
     const downloadExcel = () => {   
         const worksheet = XLSX.utils.json_to_sheet(products);
         const workbook = XLSX.utils.book_new();

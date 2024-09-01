@@ -23,7 +23,7 @@ export default function SignupPage() {
 
   return (
     <div className={cn("flex h-screen")}>
-      <div className="relative w-1/2 h-full">
+      <div className="relative hidden md:block w-1/2 h-full">
         <Image
           src="/inventory.svg"
           alt="logo"
@@ -33,7 +33,7 @@ export default function SignupPage() {
         />
       </div>
 
-      <div className="w-1/2 flex flex-col items-center justify-center space-y-5 p-4">
+      <div className="md:w-1/2 flex flex-col items-center justify-center space-y-5 p-4">
         <Image
           src="/logo.svg"
           alt="logo"

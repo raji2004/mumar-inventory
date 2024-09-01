@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table"
-import { Edit2, Trash2, ArrowUpDown } from "lucide-react";
+import { Edit2, Trash2, ArrowUpDown, ArrowDown, ArrowUp } from "lucide-react";
 import { Button } from "./ui/button";
 import { Product } from "@/lib/type";
 import Link from "next/link";
@@ -15,7 +15,7 @@ const handleDelete = async (id: string) => {
     await deleteProduct(id);
     toast.success("Product deleted successfully");
   } catch (error) {
-    console.error(error);
+    console.log(error);
     toast.error("An error occurred while deleting the product");
   }
 }
@@ -46,10 +46,21 @@ export const productColumns: ColumnDef<Product>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Quantity
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === "desc" ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : (
+            null
+          )}
         </Button>
       )
     },
+    cell: ({ getValue }) => (
+      <div className="flex justify-center mr-6">
+          {String(getValue())}
+      </div>
+    ),
   },
   {
     accessorKey: "sellingPrice",
@@ -65,7 +76,13 @@ export const productColumns: ColumnDef<Product>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           expire date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === "desc" ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : (
+            null
+          )}
         </Button>
       )
     },
