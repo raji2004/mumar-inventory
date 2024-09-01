@@ -7,11 +7,11 @@ import { productColumns,productsData } from "@/components/columns"
 import Link from "next/link"
 import { DownloadFile } from "@/components/download"
 import { getAllProduct } from "@/lib/db/read"
+import { revalidateTag } from 'next/cache';
 
 export default async function Page({searchParams,}:{searchParams:{query?: string}}) {
-    console.log('searchParams',searchParams.query);
     const products = await getAllProduct({query:searchParams.query});
-
+    revalidateTag('products');
    
     return (
         <div className={cn(RESPONSIVE_LAYOUT_PADDING, "space-y-10 ")}>

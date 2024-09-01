@@ -10,11 +10,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { DatePicker } from "@/components/ui/date-picker";
 import { cn } from "@/lib/utils";
-import { ProductSchema } from "@/lib/schemas";
+import { ProductSchema, SupplierSchema } from "@/lib/schemas";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateProduct } from "@/lib/db/update";
-import { Product } from "@/lib/type";
+import { updateProduct, updateSupplier } from "@/lib/db/update";
+import { Product, Supplier } from "@/lib/type";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
@@ -164,6 +164,150 @@ export const EditProductForm = ({ product, }: { product: Product }) => {
 
                         <Button type="submit" className="w-full bg-primary-900">
                             Update Product
+                        </Button>
+                    </form>
+                </Form>
+            </div>
+        </div>
+    );
+};
+
+export const EditSupplierForm = ({ supplier }: { supplier: Supplier }) => {
+    const router = useRouter();
+    const form = useForm({
+        resolver: zodResolver(SupplierSchema),
+        defaultValues: {
+            name: supplier.name,
+            phoneNumber: supplier.phoneNumber,
+            bank: supplier.bank,
+            accountNumber: supplier.accountNumber,
+            accountName: supplier.accountName,
+        },
+    });
+
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        console.log("Form submission triggered");
+        const formattedData: Supplier = {
+            supplierId: supplier.supplierId,
+            name: data.name,
+            phoneNumber: data.phoneNumber, // Ensure this is a number
+            bank: data.bank,
+            accountNumber: data.accountNumber, // Ensure this is a number
+            accountName: data.accountName,
+        };
+
+        try {
+            updateSupplier(supplier.supplierId, formattedData);
+            toast.success("Supplier updated successfully");
+            router.push('/admin/suppliers');
+        } catch (e) {
+            console.error("Error updating supplier", e);
+        }
+    };
+
+    return (
+        <div className={cn("flex h-screen justify-center")}>
+            <div className="flex flex-col items-center justify-center space-y-5 p-4">
+                <h1 className="text-2xl md:text-4xl font-semibold mt-4">Edit Supplier</h1>
+
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full max-w-3xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Supplier Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter supplier name" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Phone Number</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                type="text" // Keep as text to allow leading zeros
+                                                placeholder="Enter phone number"
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    // Ensure only digits are entered
+                                                    if (/^\d*$/.test(value)) {
+                                                        field.onChange(value);
+                                                    }
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="bank"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Bank</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter bank name" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="accountNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Account Number</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                type="text" // Keep as text to allow leading zeros
+                                                placeholder="Enter account number"
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    // Ensure only digits are entered
+                                                    if (/^\d*$/.test(value)) {
+                                                        field.onChange(value);
+                                                    }
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="accountName"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Account Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter account name" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <Button type="submit" className="w-full bg-primary-900">
+                            Update Supplier
                         </Button>
                     </form>
                 </Form>
