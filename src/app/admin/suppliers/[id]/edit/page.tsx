@@ -1,13 +1,15 @@
-import { getProductById } from "@/lib/db/read"
-import { EditProductForm } from "@/components/forms";
+import { getSupplierById } from "@/lib/db/read"
+import { EditSupplierForm } from "@/components/forms";
+import { revalidateTag } from "next/cache";
 
 
 
 
 export default async function Page({ params }: { params: { id?: string, } }) {
-    const product = await getProductById(params.id ?? "");
+    const supplier = await getSupplierById(params.id ?? "");
+    revalidateTag('suppliers');
     return (
        
-            <EditProductForm product={product} />
+            <EditSupplierForm supplier={supplier} />
     )
 }

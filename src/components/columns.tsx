@@ -2,11 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table"
-import { Edit2, Trash2, ArrowUpDown, ArrowDown, ArrowUp } from "lucide-react";
+import { Edit2, Trash2, Copy, ArrowDown, ArrowUp } from "lucide-react";
 import { Button } from "./ui/button";
 import { Product, Supplier } from "@/lib/type";
 import Link from "next/link";
-import { deleteProduct } from "@/lib/db/delete";
+import { deleteProduct,deleteSupplier } from "@/lib/db/delete";
 import { toast } from "react-toastify";
 
 // This type is used to define the shape of our data.
@@ -14,6 +14,15 @@ const handleDelete = async (id: string) => {
   try {
     await deleteProduct(id);
     toast.success("Product deleted successfully");
+  } catch (error) {
+    console.log(error);
+    toast.error("An error occurred while deleting the product");
+  }
+}
+const handleSupplierDelete = async (id: string) => {
+  try {
+    await deleteSupplier(id);
+    toast.success("Supplier deleted successfully");
   } catch (error) {
     console.log(error);
     toast.error("An error occurred while deleting the product");
@@ -160,10 +169,11 @@ export const supplierColumns: ColumnDef<Supplier>[] = [
   
       return (
         <div 
-          className="flex justify-center cursor-pointer text-blue-500 hover:underline"
+          className="flex items-center justify-center cursor-pointer"
           onClick={handleCopy}
         >
           {String(accountNumber)}
+          <Copy size={16} className="ml-2" />
         </div>
       );
     },
@@ -192,7 +202,7 @@ export const supplierColumns: ColumnDef<Supplier>[] = [
         </Link>
         <Button
           variant={"outline"}
-          // onClick={() => handleDeleteSupplier(row.original.supplierId)} // Replace with your delete logic
+          onClick={() => handleSupplierDelete(row.original.supplierId)} // Replace with your delete logic
           className="text-red-500 bg-transparent hover:text-red-700"
         >
           <Trash2 size={16} />
