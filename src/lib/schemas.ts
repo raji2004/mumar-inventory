@@ -26,3 +26,12 @@ export const ProductSchema = z.object({
   expiryDate: z.date(),
   availability: z.enum(["in-stock", "low-stock", "out-of-stock"]),
 });
+
+export const SupplierSchema = z.object({
+  name: z.string().min(1, "Supplier name is required"),
+  phoneNumber: z.string().min(11, "Phone number must be at least 11 characters long"),
+  bank: z.string().min(1, "Bank name is required"),
+  accountNumber: z.string().min(10,"Account number must be at least 10 characters long"),
+  accountName: z.string().min(1, "Account name is required"),
+});
+

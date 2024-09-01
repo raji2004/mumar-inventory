@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table"
 import { Edit2, Trash2, ArrowUpDown, ArrowDown, ArrowUp } from "lucide-react";
 import { Button } from "./ui/button";
-import { Product } from "@/lib/type";
+import { Product, Supplier } from "@/lib/type";
 import Link from "next/link";
 import { deleteProduct } from "@/lib/db/delete";
 import { toast } from "react-toastify";
@@ -134,6 +134,73 @@ export const productColumns: ColumnDef<Product>[] = [
   },
 ];
 
+export const supplierColumns: ColumnDef<Supplier>[] = [
+
+  {
+    accessorKey: "name",
+    header: "Supplier Name",
+  },
+  {
+    accessorKey: "accountName",
+    header: "Account Name",
+  },
+  {
+    accessorKey: "accountNumber",
+    header: "Account Number",
+    size:180,
+    cell: ({ getValue }) => {
+      const accountNumber = getValue();
+      const handleCopy = () => {
+        navigator.clipboard.writeText(String(accountNumber).toString()).then(() => {
+          toast.success("Account number copied to clipboard!");
+        }).catch(err => {
+          console.error("Failed to copy: ", err);
+        });
+      };
+  
+      return (
+        <div 
+          className="flex justify-center cursor-pointer text-blue-500 hover:underline"
+          onClick={handleCopy}
+        >
+          {String(accountNumber)}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "phoneNumber",
+    header: "Phone Number",
+   
+  },
+  {
+    accessorKey: "bank",
+    header: "Bank",
+   
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <Link href={`/admin/suppliers/${row.original.supplierId}/edit`}>
+          <Button
+            variant={"outline"}
+            className="text-blue-500 bg-transparent hover:text-blue-700"
+          >
+            <Edit2 size={16} />
+          </Button>
+        </Link>
+        <Button
+          variant={"outline"}
+          // onClick={() => handleDeleteSupplier(row.original.supplierId)} // Replace with your delete logic
+          className="text-red-500 bg-transparent hover:text-red-700"
+        >
+          <Trash2 size={16} />
+        </Button>
+      </div>
+    ),
+  },
+];
 export const productsData: Product[] = [
   {
     productId: "1",

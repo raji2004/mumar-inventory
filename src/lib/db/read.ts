@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/client';
-import { Product } from '../type';
+import { Product ,Supplier} from '../type';
 import { revalidatePath } from 'next/cache'
 
 const supabase = createClient();
@@ -21,6 +21,25 @@ export const getAllProduct = async ({query}:{query?: string}={}): Promise<Produc
     }
 
     revalidatePath('/admin/inventory', 'layout');
+    return data;
+}
+export const getAllSupplier= async ({query}:{query?: string}={}): Promise<Supplier[]> => {
+  
+
+    let queryBuilder = supabase.from('suppliers').select('*');
+
+    // If a query is provided, filter by name
+    if (query) {
+        queryBuilder = queryBuilder.ilike('name', `%${query}%`); // Case-insensitive search
+    }
+
+    const { data, error } = await queryBuilder;
+
+    if (error) {
+        throw error;
+    }
+
+    revalidatePath('/admin/suppliers', 'page');
     return data;
 }
 
