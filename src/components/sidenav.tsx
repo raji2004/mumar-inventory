@@ -7,6 +7,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { logout } from "@/utils/action";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { isAdmin } from "@/lib/db/read";
 
 // Icon Components
 function Icon({ children, className }: { children: React.ReactNode; className: string }) {
@@ -22,34 +24,6 @@ function MenuIcon(props: any) {
     </Icon>
   );
 }
-
-const navItems = [
-  {
-    name: "Dashboard",
-    href: "/admin",
-    icon: '/icon/Home.svg',
-  },
-  {
-    name: "Inventory",
-    href: "/admin/inventory",
-    icon: '/icon/Inventory.png',
-  },
-  {
-    name: "Reports",
-    href: "/admin/reports",
-    icon: '/icon/Report.svg',
-  },
-  {
-    name: "Suppliers",
-    href: "/admin/suppliers",
-    icon: '/icon/Suppliers.svg',
-  },
-  {
-    name: "Sales",
-    href: "/admin/sales",
-    icon: '/icon/Order.svg',
-  },
-]
 
 // Navigation Link Component
 function NavLink({ href, iconSrc, children, isActive }: { href: string; isActive?: boolean; iconSrc: string; children: React.ReactNode }) {
@@ -70,10 +44,57 @@ function NavLink({ href, iconSrc, children, isActive }: { href: string; isActive
 // Main Component
 export default function SideNav() {
   const pathname = usePathname();
+  const [admin, setAdmin] = useState(false);
 
+  useEffect(() => {
+    // Check if the user is an admin
+    const checkAdmin = async () => {
+      const adminStatus = await isAdmin();
+      setAdmin(adminStatus);
+    };
+    checkAdmin();
+  }, []);
+
+  const isAdminRoute = pathname.startsWith("/admin");
+  const navItems = [
+    {
+      name: "Dashboard",
+      href: isAdminRoute ? "/admin" : "/",
+      icon: '/icon/Home.svg',
+    },
+    isAdminRoute && admin && {
+      name: "Inventory",
+      href: "/admin/inventory",
+      icon: '/icon/Inventory.png',
+    },
+    isAdminRoute && admin && {
+      name: "Reports",
+      href: "/admin/reports",
+      icon: '/icon/Report.svg',
+    },
+    isAdminRoute && admin && {
+      name: "Suppliers",
+      href: "/admin/suppliers",
+      icon: '/icon/Suppliers.svg',
+    },
+    isAdminRoute && admin && {
+      name: "Sales",
+      href: "/admin/sales",
+      icon: '/icon/Order.svg',
+    },
+    isAdminRoute && admin && {
+      name: "Recent Sales",
+      href: "/",
+      icon: '/icon/Manage.svg',
+    },
+    !isAdminRoute && admin && {
+      name: "Admin",
+      href: "/admin",
+      icon: '/icon/Inventory.png',
+    },
+  ].filter(Boolean) as Array<{ name: string; href: string; icon: string }>; 
   const handleLogout = async () => {
     await logout();
-    // This will handle the redirect inside the logout function itself.
   };
 
   return (

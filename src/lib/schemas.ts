@@ -34,4 +34,6 @@ export const SupplierSchema = z.object({
   accountNumber: z.string().min(10,"Account number must be at least 10 characters long"),
   accountName: z.string().min(1, "Account name is required"),
 });
-
+export const SaleSchema = z.object({
+  quantity_sold: z.number().nonnegative("Quantity sold must be a non-negative number"),
+});
