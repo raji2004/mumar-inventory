@@ -42,7 +42,7 @@ export const isLoggedIn = async () => {
         throw error;
     }
     
-    return !!data.user;
+    return !!data?.user;
 }
 
 export const getAllSupplier = async ({ query }: { query?: string } = {}): Promise<Supplier[]> => {
