@@ -1,7 +1,8 @@
 "use server";
 import { createClient } from '@/utils/supabase/client';
-import { Product, Supplier } from '../type';
+import { Product, Sales, Supplier } from '../type';
 import { revalidatePath, revalidateTag } from 'next/cache';
+import { createClient as server } from '@/utils/supabase/server'
 
 const supabase = createClient();
 
@@ -24,6 +25,16 @@ export const getAllProduct = async ({ query }: { query?: string } = {}): Promise
     revalidatePath('/admin/inventory');
     return data;
 }
+
+export const isAdmin = async () => {
+    const supabaseServer = server();
+    const { data, error } = await supabaseServer.auth.getUser();
+    if (error) {
+        throw error;
+    }
+
+    return data.user?.email === 'suleman_raji@yahoo.com';
+};
 
 export const getAllSupplier = async ({ query }: { query?: string } = {}): Promise<Supplier[]> => {
     let queryBuilder = supabase.from('suppliers').select('*');
@@ -80,3 +91,41 @@ export const getSupplierById = async (id: string): Promise<Supplier> => {
     revalidatePath(`/admin/suppliers/${id}/edit`);
     return data;
 }
+export const getSaleById = async (id: string): Promise<Sales> => {
+    const { data, error } = await supabase
+        .from('sales')
+        .select('*')
+        .eq('sale_id', id)
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    // Revalidate all paths or components associated with the 'suppliers' tag
+    revalidateTag('sales');
+    revalidatePath('/');
+    revalidatePath(`/${id}/edit`);
+    return data;
+}
+
+export const getSalesForToday = async () => {
+    const today = new Date();
+    const todayString = today.toISOString().slice(0, 10); // Format: YYYY-MM-DD
+
+    const { data, error } = await supabase
+        .from('sales')
+        .select('*')
+        .gte('date_sold', todayString)
+        .lt('date_sold', new Date(today.getFullYear(), today.getMonth() + 1, 1).toISOString().slice(0, 10)); // Get all sales for the current day
+
+    if (error) {
+        console.error("Error fetching sales for today:", error.message);
+        return [];
+    }
+
+    revalidateTag('sales');
+    revalidatePath('/')
+    return data;
+}
+

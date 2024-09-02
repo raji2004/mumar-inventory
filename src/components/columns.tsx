@@ -4,10 +4,11 @@ import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table"
 import { Edit2, Trash2, Copy, ArrowDown, ArrowUp } from "lucide-react";
 import { Button } from "./ui/button";
-import { Product, Supplier } from "@/lib/type";
+import { Product, Sales, Supplier } from "@/lib/type";
 import Link from "next/link";
-import { deleteProduct,deleteSupplier } from "@/lib/db/delete";
+import { deleteProduct, deleteSupplier,deleteSale } from "@/lib/db/delete";
 import { toast } from "react-toastify";
+import { convertToNaira } from "@/lib/defaults";
 
 // This type is used to define the shape of our data.
 const handleDelete = async (id: string) => {
@@ -28,13 +29,32 @@ const handleSupplierDelete = async (id: string) => {
     toast.error("An error occurred while deleting the product");
   }
 }
-const convertToNaira = (price: number): string => {
-  const nairaValue = price.toFixed(2); // Format to 2 decimal places
-  const parts = nairaValue.split('.'); // Split into whole and decimal parts
-  const wholePart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas
-  return `₦${wholePart}.${parts[1]}`; // Combine and return
-};
+const handleDeleteSale = async (id: string) => {
+  try {
+    await deleteSale(id);
+    toast.success("Sale deleted successfully");
+  } catch (error) {
+    console.log(error);
+    toast.error("An error occurred while deleting the Sale");
+  }
+}
 
+
+const formatDate = (dateInput: Date | string): string => {
+  const date = new Date(dateInput); // Convert to Date object
+
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid date provided');
+  }
+
+  // Get day, month, and year
+  const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if necessary
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`; // Return formatted date
+};
 export const productColumns: ColumnDef<Product>[] = [
   {
     accessorKey: "name", // Changed from "email" to "products"
@@ -67,7 +87,7 @@ export const productColumns: ColumnDef<Product>[] = [
     },
     cell: ({ getValue }) => (
       <div className="flex justify-center mr-6">
-          {String(getValue())}
+        {String(getValue())}
       </div>
     ),
   },
@@ -95,6 +115,7 @@ export const productColumns: ColumnDef<Product>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => formatDate(row.getValue("expiryDate")),
   },
   {
     accessorKey: "availability", // Changed from "status" to "availability"
@@ -156,7 +177,7 @@ export const supplierColumns: ColumnDef<Supplier>[] = [
   {
     accessorKey: "accountNumber",
     header: "Account Number",
-    size:180,
+    size: 180,
     cell: ({ getValue }) => {
       const accountNumber = getValue();
       const handleCopy = () => {
@@ -166,9 +187,9 @@ export const supplierColumns: ColumnDef<Supplier>[] = [
           console.error("Failed to copy: ", err);
         });
       };
-  
+
       return (
-        <div 
+        <div
           className="flex items-center justify-center cursor-pointer"
           onClick={handleCopy}
         >
@@ -181,12 +202,12 @@ export const supplierColumns: ColumnDef<Supplier>[] = [
   {
     accessorKey: "phoneNumber",
     header: "Phone Number",
-   
+
   },
   {
     accessorKey: "bank",
     header: "Bank",
-   
+
   },
   {
     id: "actions",
@@ -211,59 +232,53 @@ export const supplierColumns: ColumnDef<Supplier>[] = [
     ),
   },
 ];
-export const productsData: Product[] = [
+
+export const salesColumns: ColumnDef<Sales>[] = [
   {
-    productId: "1",
-    name: "Apple",
-    buyingPrice: 1500.50, // Changed to number
-    quantity: "100",
-    sellingPrice: 0.75, // Changed to number
-    expiryDate: "2024-09-10",
-    availability: "in-stock",
+    accessorKey: "product_name",
+    header: "Name",
   },
   {
-    productId: "2",
-    name: "Banana",
-    buyingPrice: 0.30, // Changed to number
-    quantity: "150",
-    sellingPrice: 0.50, // Changed to number
-    expiryDate: "2024-09-12",
-    availability: "in-stock",
+    accessorKey: "quantity_sold",
+    header: "Quantity Sold",
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        {String(row.getValue("quantity_sold"))}
+      </div>
+    ),
+   
   },
   {
-    productId: "3",
-    name: "Orange",
-    buyingPrice: 0.40, // Changed to number
-    quantity: "200",
-    sellingPrice: 0.60, // Changed to number
-    expiryDate: "2024-09-15",
-    availability: "in-stock",
+    accessorKey: "date_sold",
+    header: "Date Sold",
+    cell: ({ row }) => formatDate(row.getValue("date_sold")),
+
   },
   {
-    productId: "4",
-    name: "Milk",
-    buyingPrice: 1.20, // Changed to number
-    quantity: "50",
-    sellingPrice: 1.50, // Changed to number
-    expiryDate: "2024-08-30",
-    availability: "low-stock",
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => convertToNaira(row.getValue("price")),
   },
   {
-    productId: "5",
-    name: "Bread",
-    buyingPrice: 1.00, // Changed to number
-    quantity: "80",
-    sellingPrice: 1.20, // Changed to number
-    expiryDate: "2024-09-05",
-    availability: "in-stock",
-  },
-  {
-    productId: "6",
-    name: "Cheese",
-    buyingPrice: 2.50, // Changed to number
-    quantity: "30",
-    sellingPrice: 3.00, // Changed to number
-    expiryDate: "2024-10-01",
-    availability: "out-of-stock",
+    id: "actions",
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <Link href={`sell/${row.original.sale_id}/edit`}>
+          <Button
+            variant={"outline"}
+            className="text-blue-500 bg-transparent hover:text-blue-700"
+          >
+            <Edit2 size={16} />
+          </Button>
+        </Link>
+        <Button
+          variant={"outline"}
+          onClick={() => handleDeleteSale(row.original.sale_id)} // Replace with your delete logic
+          className="text-red-500 bg-transparent hover:text-red-700"
+        >
+          <Trash2 size={16} />
+        </Button>
+      </div>
+    ),
   },
 ];
