@@ -5,22 +5,21 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { createClient as server } from '@/utils/supabase/server'
 
 const supabase = createClient();
-const supabaseServer = server();
 
 export const getAllProduct = async ({ query }: { query?: string } = {}): Promise<Product[]> => {
     let queryBuilder = supabase.from('product_availability').select('*');
-
+    
     // If a query is provided, filter by name
     if (query) {
         queryBuilder = queryBuilder.ilike('name', `%${query}%`); // Case-insensitive search
     }
-
+    
     const { data, error } = await queryBuilder;
-
+    
     if (error) {
         throw error;
     }
-
+    
     // Revalidate all paths or components associated with the 'products' tag
     revalidateTag('products');
     revalidatePath('/admin/inventory');
@@ -28,6 +27,7 @@ export const getAllProduct = async ({ query }: { query?: string } = {}): Promise
 }
 
 export const isAdmin = async () => {
+    const supabaseServer = server();
     const { data, error } = await supabaseServer.auth.getUser();
     if (error) {
         throw error;
@@ -36,14 +36,7 @@ export const isAdmin = async () => {
     return data.user?.email === 'suleman_raji@yahoo.com';
 };
 
-export const isLoggedIn = async () => {
-    const { data, error } = await supabaseServer.auth.getUser();
-    if (error) {
-        throw error;
-    }
-    
-    return !!data?.user;
-}
+
 
 export const getAllSupplier = async ({ query }: { query?: string } = {}): Promise<Supplier[]> => {
     let queryBuilder = supabase.from('suppliers').select('*');
