@@ -4,7 +4,7 @@ import { recordSales } from '@/lib/db/update';
 
 export async function POST(request: NextRequest) {
     const { products } = await request.json();
-
+   
     // Validate the input
     if (!Array.isArray(products) || products.length === 0) {
         return NextResponse.json({ message: 'Invalid products data' }, { status: 400 });
