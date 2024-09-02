@@ -6,13 +6,16 @@ import { DataTable } from '@/components/table'
 import { salesColumns } from '@/components/columns'
 import { Plus } from 'lucide-react'
 import { redirect } from 'next/navigation'
-import { isLoggedIn } from '@/lib/db/read'
+import { createClient } from '@/utils/supabase/server'
 
 export default async function Page() {
-  const loggedIn = await isLoggedIn();
-  if (!loggedIn) {
-    redirect('/login');
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.getUser()
+  if (error || !data?.user) {
+    redirect('/login')
   }
+    
   
   const sales = await getSalesForToday()
   revalidateTag('sales');
