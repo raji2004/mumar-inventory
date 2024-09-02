@@ -5,8 +5,15 @@ import { revalidateTag } from 'next/cache'
 import { DataTable } from '@/components/table'
 import { salesColumns } from '@/components/columns'
 import { Plus } from 'lucide-react'
+import { redirect } from 'next/navigation'
+import { isLoggedIn } from '@/lib/db/read'
 
 export default async function Page() {
+  const loggedIn = await isLoggedIn();
+  if (!loggedIn) {
+    redirect('/login');
+  }
+  
   const sales = await getSalesForToday()
   revalidateTag('sales');
   return (
