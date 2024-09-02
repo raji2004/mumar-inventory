@@ -390,7 +390,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ productOptions }) => {
                 throw new Error('Failed to submit data');
             }
 
-            console.log('Products data submitted:', data);
+            
             toast.success('Products updated successfully');
             router.push('/');
         } catch (error) {
@@ -497,7 +497,7 @@ const SingleProductForm: React.FC<SingleProductFormProps> = ({
                 <div className="mr-18">
                     <Label>Price</Label>
                     <div className="p-2">
-                        {formData.sellingPrice ? `₦${totalSellingPrice}` : 'N/A'}
+                        {formData.sellingPrice ? `${totalSellingPrice}` : 'N/A'}
                     </div>
                 </div>
 
