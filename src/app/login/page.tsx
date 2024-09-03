@@ -88,7 +88,7 @@ export default function Page() {
           </form>
         </Form>
         <Link href="/signup" className="text-primary-900">
-          <span className=" text-black"> Don't have an account?</span> Register here
+          <span className=" text-black"> {"Don't"} have an account?</span> Register here
         </Link>
       </div>
     </div>
