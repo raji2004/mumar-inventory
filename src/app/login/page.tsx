@@ -17,6 +17,7 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { login } from "@/utils/action"
 import { loginSchema } from "@/lib/schemas"
+import Link from "next/link"
 
 
 export default function Page() {
@@ -86,6 +87,9 @@ export default function Page() {
             </Button>
           </form>
         </Form>
+        <Link href="/signup" className="text-primary-900">
+          <span className=" text-black"> Don't have an account?</span> Register here
+        </Link>
       </div>
     </div>
   )

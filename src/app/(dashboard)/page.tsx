@@ -7,6 +7,9 @@ import { salesColumns } from '@/components/columns'
 import { Plus } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
+import { cn } from '@/lib/utils'
+import { RESPONSIVE_LAYOUT_PADDING } from '@/lib/defaults'
+import { convertToNaira } from '@/lib/defaults'
 
 export default async function Page() {
   const supabase = createClient()
@@ -15,28 +18,32 @@ export default async function Page() {
   if (error || !data?.user) {
     redirect('/login')
   }
-    
-  
+
+
   const sales = await getSalesForToday()
+  const TotalSalesToday = convertToNaira(sales.reduce((total, sale) => total + sale.price, 0))
   revalidateTag('sales');
   return (
     <div className=' flex items-center w-full h-screen justify-center pt-20'>
       {
         sales.length > 0 ?
-          <div className=' space-y-10'>
-            <div className=' flex justify-between items-center'>
-
-              <h1 className=" font-semibold text-2xl">Sales Record Table</h1>
+          <div className={cn('space-y-10 ',RESPONSIVE_LAYOUT_PADDING)}>
+            <div className='flex flex-row px-6 justify-between items-center'>
+              <h1 className="font-semibold text-2xl mb-4 md:mb-0">Sales Record Table</h1>
               <Link href={'/sell'}>
-                <Button className=' w-fit bg-primary-900'>
-                  <Plus />
-                  </Button>
+                <Button className='w-full md:w-fit bg-primary-900 flex items-center justify-center'>
+                  <Plus className="mr-2" />
+                  <span className=' hidden md:block'>Add Sale</span>
+                </Button>
               </Link>
             </div>
+            <div className=' pl-6 max-w-sm md:max-w-none'>
             <DataTable
               data={sales}
               columns={salesColumns}
             />
+            <h1 className=' -mt-10 text-lg' >Total : <span className=' text-xl font-medium'>{TotalSalesToday}</span> </h1>
+            </div>
           </div>
 
           :

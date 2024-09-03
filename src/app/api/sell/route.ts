@@ -10,8 +10,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: 'Invalid products data' }, { status: 400 });
     }
 
-    // Here, you would typically process the data (e.g., save to database)
-    // For demonstration, we're just logging it
+   
    
     try {
         await recordSales(products);
