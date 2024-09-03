@@ -443,7 +443,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ productOptions }) => {
                                 Add
                             </Button>
 
-                            <Button type="submit" className={`bg-primary-900 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading}>
+                            <Button variant={'destructive'} type="submit"  disabled={loading}>
                                 Sell
                             </Button>
                         </div>

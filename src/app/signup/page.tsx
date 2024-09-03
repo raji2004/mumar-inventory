@@ -9,6 +9,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { signupSchema } from "@/lib/schemas";
 import { signup } from "@/utils/action";
+import Link from "next/link";
+
 
 
 export default function SignupPage() {
@@ -93,6 +95,9 @@ export default function SignupPage() {
             </Button>
           </form>
         </Form>
+        <Link href="/login" className="text-primary-900">
+          <span className=" text-black"> Already have an account?</span> Login here
+        </Link>
       </div>
     </div>
   );

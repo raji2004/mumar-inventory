@@ -38,6 +38,7 @@ export const isAdmin = async () => {
 
 
 
+
 export const getAllSupplier = async ({ query }: { query?: string } = {}): Promise<Supplier[]> => {
     let queryBuilder = supabase.from('suppliers').select('*');
 
