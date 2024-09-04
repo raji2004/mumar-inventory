@@ -3,6 +3,7 @@
 import { CartesianGrid, XAxis, YAxis, LineChart, Line } from "recharts"
 import { convertToNaira, convertToNairaGraph } from "@/lib/defaults";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import Image from "next/image";
 
 // const chartData = [
 //     { month: "January", revenue: 8000, profit: 3000 },
@@ -40,53 +41,56 @@ const LegendItem = ({ color, label }: any) => {
 };
 
 export const LineGraph = ({ chartData }: { chartData: { day: string, revenue: number, profit: number }[] }) => {
+    console.log(chartData);
     return (
         <div>
-            <h1 className=" font-medium text-lg md:text-2xl my-10"> Profit & Revenue</h1>
-            <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-                <LineChart data={chartData} >
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                        dataKey="day"
-                        tickLine={false}
-                        tickMargin={10}
-                        axisLine={true}
-                        tickFormatter={(value) => value.slice(0, 3)}
-                    />
-                    <YAxis
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={10}
-                        tickFormatter={(value) => convertToNairaGraph(value)}
-                    />
-                    <ChartTooltip
-                        content={
-                            <ChartTooltipContent
-                               
+            <h1 className="font-medium text-lg md:text-2xl my-10">Profit & Revenue</h1>
+            {chartData.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                    <Image src="/empty.svg" alt="empty" width={500} height={500} />
+                    <p className=" mr-24 text-gray-500">No data available</p>
+                </div>
+            ) : (
+                <>
+                    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+                        <LineChart data={chartData}>
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="day"
+                                tickLine={false}
+                                tickMargin={10}
+                                axisLine={true}
+                                tickFormatter={(value) => value.slice(0, 3)}
                             />
-                        }
-                    />
-
-                    <Line
-                        type="monotone"
-                        dataKey="revenue"
-                        stroke={chartConfig.revenue.color}
-                        dot={false}
-
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="profit"
-                        stroke="#DBA362"
-                        dot={false}
-                    />
-                </LineChart>
-            </ChartContainer>
-            <div className="flex justify-center mt-4">
-                <LegendItem color={chartConfig.revenue.color} label={chartConfig.revenue.label} />
-                <LegendItem color={chartConfig.profit.color} label={chartConfig.profit.label} />
-            </div>
+                            <YAxis
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={10}
+                                tickFormatter={(value) => convertToNairaGraph(value)}
+                            />
+                            <ChartTooltip
+                                content={<ChartTooltipContent />}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="revenue"
+                                stroke={chartConfig.revenue.color}
+                                dot={false}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="profit"
+                                stroke="#DBA362"
+                                dot={false}
+                            />
+                        </LineChart>
+                    </ChartContainer>
+                    <div className="flex justify-center mt-4">
+                        <LegendItem color={chartConfig.revenue.color} label={chartConfig.revenue.label} />
+                        <LegendItem color={chartConfig.profit.color} label={chartConfig.profit.label} />
+                    </div>
+                </>
+            )}
         </div>
-
-    )
+    );
 }

@@ -5,6 +5,7 @@ import { Calendar } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { convertToNaira } from "@/lib/defaults";
 import { BestSales } from "@/lib/type";
+import Image from "next/image";
 
 
 export const OverviewCard = ({ data }: { data: { totalProfit: number, totalRevenue: number, totalSales: number, filter: string } }) => {
@@ -66,24 +67,32 @@ export const OverviewCard = ({ data }: { data: { totalProfit: number, totalReven
 
 export const BestSellingProductCard = ({ data }: { data: BestSales[] }) => {
     return (
-        <Card className=" w-full ">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Best Selling Product</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className=" flex justify-between items-end text-gray-500">
-                   <h1>Category</h1>
-                   <h1>Total Sold</h1>
-                </div>
                 {
-                    data.map((product, index) => (
-                        <div key={index} className="flex justify-between items-center py-2">
-                            <h1>{product.product_name}</h1>
-                            <h1 className=" mr-9">{product.total_quantity_sold}</h1>
+                    data.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full"> {/* Center the empty state */}
+                            <Image src="/empty.svg" alt="empty" width={150} height={150} />
+                            <p className="mt-2  text-gray-500">No sales made</p>
                         </div>
-                    ))
+                    ) : (
+                        <>
+                            <div className="flex justify-between items-end text-gray-500 mb-2">
+                                <h1>Category</h1>
+                                <h1>Total Sold</h1>
+                            </div>
+                            {data.map((product, index) => (
+                                <div key={index} className="flex justify-between items-center py-2">
+                                    <h1>{product.product_name}</h1>
+                                    <h1 className="mr-9">{product.total_quantity_sold}</h1>
+                                </div>
+                            ))}
+                        </>
+                    )
                 }
-                
             </CardContent>
         </Card>
     )
