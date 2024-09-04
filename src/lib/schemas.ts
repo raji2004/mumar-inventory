@@ -1,5 +1,3 @@
-"use client"
-
 import { z } from "zod"
 
 // Schema for form validation using Zod
