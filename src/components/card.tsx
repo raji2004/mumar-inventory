@@ -75,7 +75,7 @@ export const BestSellingProductCard = ({ data }: { data: BestSales[] }) => {
                 {
                     data.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full"> {/* Center the empty state */}
-                            <Image src="/empty.svg" alt="empty" width={150} height={150} />
+                            <Image src="/Empty.svg" alt="empty" width={150} height={150} />
                             <p className="mt-2  text-gray-500">No sales made</p>
                         </div>
                     ) : (

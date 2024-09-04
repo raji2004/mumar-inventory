@@ -47,7 +47,7 @@ export const LineGraph = ({ chartData }: { chartData: { day: string, revenue: nu
             <h1 className="font-medium text-lg md:text-2xl my-10">Profit & Revenue</h1>
             {chartData.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full">
-                    <Image src="/empty.svg" alt="empty" width={500} height={500} />
+                    <Image src="/Empty.svg" alt="empty" width={500} height={500} />
                     <p className=" mr-24 text-gray-500">No data available</p>
                 </div>
             ) : (
