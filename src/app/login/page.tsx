@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils"
 import { login } from "@/utils/action"
 import { loginSchema } from "@/lib/schemas"
 import Link from "next/link"
+import { toast } from "react-toastify"
 
 
 export default function Page() {
@@ -25,9 +26,15 @@ export default function Page() {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    login(data)
-  }
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+      const logindata =  await login(data); 
+      if (logindata != undefined && logindata.error) {
+        toast.error(`Login failed: ${logindata.error}`);
+        return;
+      }
+        toast.success('Login successful!');
+   
+};
 
   return (
     <div className={cn("flex h-screen")}>

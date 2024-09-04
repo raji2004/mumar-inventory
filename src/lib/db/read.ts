@@ -1,6 +1,6 @@
 "use server";
 import { createClient } from '@/utils/supabase/client';
-import { Product, Sales, Supplier } from '../type';
+import { BestSales, Product, Sales, SalesSummary, Supplier } from '../type';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { createClient as server } from '@/utils/supabase/server'
 
@@ -129,6 +129,43 @@ export const getSalesForToday = async () => {
 
     revalidateTag('sales');
     revalidatePath('/')
+    return data;
+}
+
+export const getSalesSummary = async (filter:string):Promise<SalesSummary>  => {
+    // await new Promise(resolve => setTimeout(resolve, 2000));
+    const { data, error } = await supabase
+        .rpc('get_sales_summary', { filter });
+
+    if (error) {
+        console.error('Error fetching sales summary:', error.message);
+        throw error;
+    }
+
+   revalidatePath('/admin/reports');
+
+    return data[0]
+};
+
+export const getBestSellingProducts=async():Promise<BestSales[]>=> {
+    const { data, error } = await supabase.rpc('get_best_selling_product');
+
+    if (error) {
+        console.error('Error fetching best-selling products:', error);
+        throw error;
+    }
+    revalidatePath('/admin/reports');
+    return data;
+}
+
+export const getRevenueProfit = async ()=>{
+    const { data, error } = await supabase.rpc('get_daily_revenue_profit');
+
+    if (error) {
+        console.error('Error fetching revenue and profit:', error);
+        throw error;
+    }
+    revalidatePath('/admin/reports');
     return data;
 }
 

@@ -5,6 +5,7 @@ import { createClient } from './supabase/server'
 import { FieldValues} from "react-hook-form"
 
 
+
 export async function login(formData: FieldValues) {
   const supabase = createClient();
 
@@ -17,8 +18,8 @@ export async function login(formData: FieldValues) {
 
   if (error) {
     console.log('Login Error:', error.message);
-
-    return;
+    
+    return { error: error.message };
   }
 
   if (email === 'suleman_raji@yahoo.com') {
@@ -28,6 +29,7 @@ export async function login(formData: FieldValues) {
      revalidatePath('/');
     redirect('/');
   }
+
 }
 
 

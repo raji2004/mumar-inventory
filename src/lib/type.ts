@@ -42,3 +42,11 @@ export interface ProductFormProps {
     productOptions: Product[]; // List of products
 }
 
+export type SalesSummary = {
+    total_profit: number;
+    total_sales: number;
+    total_revenue: number;
+}
+
+export type BestSales = Pick<Sales, 'product_name'> & { total_quantity_sold: Sales['quantity_sold'] };
+
