@@ -69,7 +69,7 @@ export default function SideNav() {
     },
     isAdminRoute && admin && {
       name: "Reports",
-      href: "/admin/reports",
+      href: "/admin/reports?query=day",
       icon: '/icon/Report.svg',
     },
     isAdminRoute && admin && {
@@ -99,11 +99,11 @@ export default function SideNav() {
 
   return (
     <>
-      <div className="hidden lg:block lg:w-64 lg:shrink-0 lg:border-r lg:bg-white dark:lg:bg-gray-800">
+      <div className="fixed inset-y-0 left-0 hidden lg:block lg:w-64 lg:shrink-0 lg:border-r lg:bg-white dark:lg:bg-gray-800">
         <div className="flex h-full flex-col justify-between py-6 px-4">
           <div className="space-y-6">
-            <Link href="/" className=" " prefetch={false}>
-              <Image src="/logo.svg" alt="Acme Inc" width={32} height={32} className=" w-28 h-auto mx-auto" />
+            <Link href="/" prefetch={false}>
+              <Image src="/logo.svg" alt="Acme Inc" width={32} height={32} className="w-28 h-auto mx-auto" />
             </Link>
             <nav className="space-y-1">
               {navItems.map((item) => {
@@ -120,11 +120,14 @@ export default function SideNav() {
           </div>
         </div>
       </div>
+      <div className="ml-64">
+        {/* Main content goes here */}
+      </div>
       <div className="">
         <header className="sticky top-0 z-10 border-b bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-900 lg:hidden">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2 font-bold" prefetch={false}>
-              <Image src="/logo.svg" alt="Acme Inc" width={32} height={32} className=" w-28 h-auto mx-auto" />
+              <Image src="/logo.svg" alt="Acme Inc" width={32} height={32} className="w-28 h-auto mx-auto" />
             </Link>
             <Sheet>
               <SheetTrigger asChild>

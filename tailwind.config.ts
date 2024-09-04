@@ -32,6 +32,9 @@ const config = {
         success: '#10A760',
         warning: '#E19133',
         error: '#DA3E33',
+        orange: '#DBA362',
+        purple:'#845EBC',
+        yellow:'#DBA362'
        
       },
       keyframes: {
