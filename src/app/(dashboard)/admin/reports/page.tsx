@@ -5,12 +5,7 @@ import { Suspense } from "react";
 
 
 export default async function Page({ searchParams }: { searchParams: { query: string } }) {
-    console.log('searchParams', searchParams);
-    // Dummy data for demonstration
-
     const filter = searchParams.query;
-    //   const revenueProfit = await getRevenueProfit();
-
     return (
         <div className="w-full space-y-6 p-4 pb-10">
             <div className=" flex flex-col md:flex-row items-center gap-5">

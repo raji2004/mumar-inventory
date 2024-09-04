@@ -166,7 +166,6 @@ export const getRevenueProfit = async ()=>{
         throw error;
     }
     revalidatePath('/admin/reports');
-    console.log(data);
     return data;
 }
 
