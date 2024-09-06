@@ -5,20 +5,7 @@ import { convertToNaira, convertToNairaGraph } from "@/lib/defaults";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import Image from "next/image";
 
-// const chartData = [
-//     { month: "January", revenue: 8000, profit: 3000 },
-//     { month: "February", revenue: 12000, profit: 5000 },
-//     { month: "March", revenue: 9500, profit: 4000 },
-//     { month: "April", revenue: 3000, profit: 1000 },
-//     { month: "May", revenue: 11000, profit: 6000 },
-//     { month: "June", revenue: 13000, profit: 7000 },
-//     { month: "July", revenue: 1000, profit: 200 },
-//     { month: "August", revenue: 20000, profit: 15000 },
-//     { month: "September", revenue: 500, profit: 50 },
-//     { month: "October", revenue: 15000, profit: 8000 },
-//     { month: "November", revenue: 2400, profit: 1000 },
-//     { month: "December", revenue: 4000, profit: 1200 },
-// ];
+
 
 const chartConfig = {
     revenue: {
@@ -41,7 +28,6 @@ const LegendItem = ({ color, label }: any) => {
 };
 
 export const LineGraph = ({ chartData }: { chartData: { day: string, revenue: number, profit: number }[] }) => {
-    console.log(chartData);
     return (
         <div>
             <h1 className="font-medium text-lg md:text-2xl my-10">Profit & Revenue</h1>
