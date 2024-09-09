@@ -24,7 +24,7 @@ export default async function Page() {
   const TotalSalesToday = convertToNaira(sales.reduce((total, sale) => total + sale.price, 0))
   revalidateTag('sales');
   return (
-    <div className=' flex items-center w-full h-screen justify-center pt-20'>
+    <div className=' flex items-center w-full h-screen justify-center pt-72'>
       {
         sales.length > 0 ?
           <div className={cn('space-y-10 ',RESPONSIVE_LAYOUT_PADDING)}>
